@@ -1,0 +1,9 @@
+- id: eclipse-formatter
+  name: Eclipse Java Formatter
+  description: This hook formats Java code with the Eclipse formatter.
+  # entry: eclipse-formatter.sh
+  # language: script
+  entry: eclipse-formatter
+  language: python
+  types:
+    - java
