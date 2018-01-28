@@ -7,5 +7,4 @@ repos:
     -   id: autopep8-wrapper
     -   id: flake8
     -   id: mixed-line-ending
-        args:
-        -   --fix=lf
+        args: [--fix=lf]
