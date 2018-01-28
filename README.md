@@ -17,6 +17,6 @@ Add this to your `.pre-commit-config.yaml`
 
 ## Available hooks
 
-* `eclipse-formatter` - Runs Eclipse Java formatter on all staged `java` source files. The following arguments are available:
+* `eclipse-formatter` - Runs Eclipse Java formatter with default formatting rules on all staged `java` source files. The following arguments are available:
   * `--source` - set the Java compiler source version (default `1.8`)
   * `--target` - set the Java compiler target version (default `1.8`)
