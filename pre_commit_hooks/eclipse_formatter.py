@@ -28,10 +28,10 @@ def create_pom(pom_file, args):
       <plugin>
         <groupId>net.revelc.code.formatter</groupId>
         <artifactId>formatter-maven-plugin</artifactId>
-        <version>2.7.1</version>
+        <version>2.7.0</version>
         <configuration>
           <directories>
-            <directory>.</directory>
+            <directory>../../</directory>
           </directories>
           <compilerCompliance>{source}</compilerCompliance>
           <compilerSource>{source}</compilerSource>
@@ -58,8 +58,8 @@ def main(argv=None):
     pom_file = 'target/.eclipse-formatter/formatter-pom.xml'
     create_pom(pom_file, args)
 
-    files = args.filenames
-    files[:] = ['../../' + f for f in args.filenames]
+    # files = args.filenames
+    # files[:] = ['../../' + f for f in args.filenames]
 
     includes = ','.join(args.filenames)
 
