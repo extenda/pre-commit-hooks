@@ -31,7 +31,7 @@ def create_pom(pom_file, args):
         <version>2.7.1</version>
         <configuration>
           <directories>
-            <directory>../../</directory>
+            <directory>.</directory>
           </directories>
           <compilerCompliance>{source}</compilerCompliance>
           <compilerSource>{source}</compilerSource>
@@ -58,12 +58,15 @@ def main(argv=None):
     pom_file = 'target/.eclipse-formatter/formatter-pom.xml'
     create_pom(pom_file, args)
 
-    files = ','.join(args.filenames)
+    files = args.filenames
+    files[:] = ['../../' + f for f in args.filenames]
+
+    includes = ','.join(args.filenames)
 
     status = subprocess.call([
         'mvn', '-B', '-f', pom_file,
         'formatter:format',
-        '-Dformatter.includes=' + files
+        '-Dformatter.includes=' + includes
     ])
 
     os.remove(pom_file)
