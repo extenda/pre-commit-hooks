@@ -9,7 +9,7 @@ See also: http://pre-commit.com for general usage instructions.
 Add this to your `.pre-commit-config.yaml`
 
 ```yaml
--   repo: https://github.com/extenda/pre-commit-hooks
+-   repo: git@github.com:extenda/pre-commit-hooks.git
     sha: v1.0 # Use the ref you want to point at
     hooks:
     -   id: eclipse-formatter
