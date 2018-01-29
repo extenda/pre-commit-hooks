@@ -58,16 +58,19 @@ def main(argv=None):
     pom_file = 'target/.eclipse-formatter/formatter-pom.xml'
     create_pom(pom_file, args)
 
-    # files = args.filenames
-    # files[:] = ['../../' + f for f in args.filenames]
-
     includes = ','.join(args.filenames)
+
+    env = os.environ.copy()
+    env['MAVEN_OPTS'] = (
+        '-Dorg.slf4j.simpleLogger.defaultLogLevel=error ' +
+        '-Dorg.slf4j.simpleLogger.log.net.revelc.code.formatter=info'
+    )
 
     status = subprocess.call([
         'mvn', '-B', '-f', pom_file,
         'formatter:format',
         '-Dformatter.includes=' + includes
-    ])
+    ], env=env)
 
     os.remove(pom_file)
     return status
