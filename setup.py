@@ -10,7 +10,9 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'eclipse-formatter = pre_commit_hooks.eclipse_formatter:main'
+            'eclipse-formatter = pre_commit_hooks.eclipse_formatter:main',
+            'google-java-formatter = ' +
+                'pre_commit_hooks.google_java_formatter:main'
         ],
     },
 )
