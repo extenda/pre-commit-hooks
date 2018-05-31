@@ -24,7 +24,7 @@ Add this to your `.pre-commit-config.yaml` in project's root.
 
 ```yaml
 -   repo: git@github.com:extenda/pre-commit-hooks.git
-    sha: v0.1 # Use the ref you want to point at
+    rev: v0.2 # Use the ref you want to point at
     hooks:
     -   id: google-java-formatter
 ```
@@ -40,17 +40,17 @@ Add this to your `.pre-commit-config.yaml` in project's root.
 
 There's a Google Java Format plugin for both Eclipse and IntelliJ.
 
-The current version used is `1.5`.
+The current version used is `1.6`.
 
 ### Eclipse
 
-[Download the formatter plugin](https://github.com/google/google-java-format/releases/download/google-java-format-1.5/google-java-format-eclipse-plugin_1.5.0.jar) and drop it into Eclipse's `dropins` folder.
+[Download the formatter plugin](https://github.com/google/google-java-format/releases/download/google-java-format-1.6/google-java-format-eclipse-plugin_1.6.0.jar) and drop it into Eclipse's `dropins` folder.
 
 The plugin adds a `google-java-format` formatter implementation that can be configured in `Window > Preferences > Java > Code Style > Formatter > Formatter Implementation` for the whole workspace.
 
-If you have multiple projects in one workspace, it is possible to apply the formatter only to selected projects. 
+If you have multiple projects in one workspace, it is possible to apply the formatter only to selected projects.
 
-1. Navigate to `Window > Preferences > Java > Code Style > Formatter > Formatter Implementation` 
+1. Navigate to `Window > Preferences > Java > Code Style > Formatter > Formatter Implementation`
 2. Click on `Configure Project Specific Settings`
 3. Select the project you want to apply the formatter
 4. In a newly appear window check the checkbox on `Enable project specific settings`
@@ -63,4 +63,4 @@ You must also change `Window > Preferences > Java > Code style > Organize Import
 
 A [Google Java Format IntelliJ plugin](https://plugins.jetbrains.com/plugin/8527) is available from the plugin repository. The plugin will not be enabled by default. To enable it in the current project, go to `File > Settings... > google-java-format Settings` and check `Enable`. To enable it by default in new projects, use `File > Other Settings > Default Settings...`.
 
-When enabled, it will replace the normal _Reformat Code_ action, which can be triggered from the `Code` menu or with the `Ctrl-Alt-L` (by default) keyboard shortcut.
+When enabled, it will replace the normal _Reformat Code_ action, which can be triggered from the `Code` menu or with the <kbd>Ctrl-Alt-L</kbd> (by default) keyboard shortcut.

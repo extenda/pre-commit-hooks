@@ -4,7 +4,7 @@ from setuptools import setup
 setup(
     name='pre_commit_hooks',
     description="Java hooks for pre-commit.",
-    version='1.0',
+    version='0.2',
 
     packages=find_packages('.'),
 
