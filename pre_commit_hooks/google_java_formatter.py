@@ -4,9 +4,9 @@ import argparse
 import subprocess
 import os
 import errno
-import urllib
+import urllib.request
 
-FORMATTER_VERSION = "1.6"
+FORMATTER_VERSION = "1.7"
 
 
 def get_google_java_formatter():
@@ -27,7 +27,7 @@ def get_google_java_formatter():
             + "download/google-java-format-" + FORMATTER_VERSION \
             + "/google-java-format-" \
             + FORMATTER_VERSION + "-all-deps.jar"
-        urllib.urlretrieve(url, gjf_jar)
+        urllib.request.urlretrieve(url, gjf_jar)
 
     return os.path.abspath(gjf_jar)
 

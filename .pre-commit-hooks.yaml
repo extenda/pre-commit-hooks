@@ -10,5 +10,6 @@
   description: This hook formats Java code with Google Java Formatter.
   entry: google-java-formatter
   language: python
+  language_version: python3
   types:
     - java
