@@ -17,3 +17,4 @@ RUN ln -s /work/node_modules/.bin/commitlint /usr/local/bin/commitlint
 ENV COMMITLINT_CONFIG=/work/commitlint.config.js
 
 ENTRYPOINT ["/usr/local/bin/commitlint", "--config", "/work/commitlint.config.js"]
+CMD ["--edit"]
