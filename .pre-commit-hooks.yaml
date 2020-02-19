@@ -13,3 +13,8 @@
   language_version: python3
   types:
     - java
+- id: commitlint
+  name: Commitlint
+  description: Lint commit messages according to the conventional conventions
+  entry: extenda/pre-commitlint
+  language: docker_image
