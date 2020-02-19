@@ -1,7 +1,11 @@
 {
-  "name": "pre-commitlint",
+  "name": "commitlint-plugin-tense",
   "version": "0.0.1-local",
-  "description": "Commitlint pre-commit hook",
+  "description": "Commitlint plugin that adds an imperative tense rule",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
   "private": true,
   "repository": "github:extenda/pre-commit-hooks",
   "author": {
@@ -11,9 +15,10 @@
   },
   "license": "UNLICENSED",
   "homepage": "https://github.com/extenda/pre-commit-hooks#readme",
-  "dependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
-    "commitlint-plugin-tense": "file:commitlint-plugin-tense"
+  "peerDependencies": {
+    "@commitlint/lint": "^8.3.5"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0"
   }
 }
