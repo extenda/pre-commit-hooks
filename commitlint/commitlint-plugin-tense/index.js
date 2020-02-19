@@ -3,7 +3,10 @@ const path = require('path');
 
 // Imperative mode blacklist.
 // From https://github.com/tommarshall/git-good-commit
-const blacklist = fs.readFileSync(path.join(__dirname, 'blacklist.txt'), 'utf8').split(/\W+/);
+const blacklist = fs.readFileSync(path.join(__dirname, 'blacklist.txt'), 'utf8')
+    .split(/\W+/)
+    .map((word) => word.trim())
+    .filter((word) => word.length > 0);
 
 module.exports = {
     rules: {
