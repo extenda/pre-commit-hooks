@@ -16,5 +16,5 @@
 - id: commitlint
   name: Commitlint
   description: Lint commit messages according to the conventional conventions
-  entry: extenda/pre-commitlint --edit
+  entry: extenda/commitlint --edit
   language: docker_image
