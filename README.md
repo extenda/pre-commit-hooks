@@ -23,10 +23,13 @@ $ pre-commit install
 Add this to your `.pre-commit-config.yaml` in project's root.
 
 ```yaml
--   repo: git@github.com:extenda/pre-commit-hooks.git
-    rev: v0.2 # Use the ref you want to point at
-    hooks:
-    -   id: google-java-formatter
+default_stages: [commit]
+-  repo: git@github.com:extenda/pre-commit-hooks.git
+   rev: v0.2 # Use the ref you want to point at
+   hooks:
+   - id: google-java-formatter
+   - id: commitlint
+     stages: [pre-commit]
 ```
 
 ## Available hooks
@@ -35,6 +38,7 @@ Add this to your `.pre-commit-config.yaml` in project's root.
   * `--source` - set the Java compiler source version (default `1.8`)
   * `--target` - set the Java compiler target version (default `1.8`)
 * `google-java-formatter` - Runs Google's Java formatter on all staged `java` source files.
+* `pre-commitlint` - Runs [commitlint](https://commitlint.js.org) to validate commit messages.
 
 ## Google Java format in your IDE
 
