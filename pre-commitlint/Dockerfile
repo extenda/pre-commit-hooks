@@ -1,10 +1,12 @@
 FROM node:13-alpine
 
-COPY package*.json /work/
-COPY commitlint.config.js /work/
-
 WORKDIR /work/
 
-RUN npm ci
+COPY package*.json ./
+COPY commitlint.config.js ./
+COPY commitlint-plugin-tense/ ./commitlint-plugin-tense/
 
-ENTRYPOINT ["/work/node_modules/.bin/commitlint", "--config", "/work/commitlint.config.js", "--edit" ]
+RUN npm ci --production
+RUN npm ci --prefix commitlint-plugin-tense --production
+
+ENTRYPOINT ["/work/node_modules/.bin/commitlint", "--config", "/work/commitlint.config.js"]
