@@ -71,4 +71,4 @@ When enabled, it will replace the normal _Reformat Code_ action, which can be tr
 
 ## License
 
-This project is licensed under the [MIT license](./LICENSE.md).
+This project is licensed under the [MIT license](./LICENSE).
