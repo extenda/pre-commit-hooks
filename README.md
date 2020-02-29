@@ -29,7 +29,7 @@ default_stages: [commit]
    hooks:
    - id: google-java-formatter
    - id: commitlint
-     stages: [pre-commit]
+     stages: [commit-msg]
 ```
 
 ## Available hooks
