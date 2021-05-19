@@ -23,14 +23,30 @@ def get_google_java_formatter():
 
     if not os.path.isfile(gjf_jar):
         print("Downloading " + gjf_jar + "...")
+        https://github.com/google/google-java-format/releases/download/v1.10.0/google-java-format-1.10.0-all-deps.jar
         url = "https://github.com/google/google-java-format/releases/" \
-            + "download/google-java-format-" + FORMATTER_VERSION \
+            + "download/" + FORMATTER_VERSION \
             + "/google-java-format-" \
             + FORMATTER_VERSION + "-all-deps.jar"
         urllib.request.urlretrieve(url, gjf_jar)
 
     return os.path.abspath(gjf_jar)
 
+def jep396_args():
+    try:
+        with subprocess.Popen("java -version", stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
+            output = process.communicate()[1].decode("utf-8")
+        if output.find('version "'):
+            majorVersion = output.split('"')[1].split(".")[0]
+            if int(majorVersion) >= 16:
+                return "--add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
+--add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+--add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+--add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+--add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+        return ""
+    except ValueError:
+        return ""
 
 def main(argv=None):
     parser = argparse.ArgumentParser()
@@ -39,8 +55,13 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     formatter = get_google_java_formatter()
-    return subprocess.call([
-        'java', '-jar', formatter, '--replace'] + args.filenames)
+    jep_arg = jep396_args()
+    if not jep_arg: 
+        return subprocess.call([
+            'java', '-jar', formatter, '--replace'] + args.filenames)
+    else:
+        return subprocess.call([
+            'java', jep_arg, '-jar', formatter, '--replace'] + args.filenames)
 
 
 if __name__ == "__main__":
