@@ -23,7 +23,6 @@ def get_google_java_formatter():
 
     if not os.path.isfile(gjf_jar):
         print("Downloading " + gjf_jar + "...")
-        https://github.com/google/google-java-format/releases/download/v1.10.0/google-java-format-1.10.0-all-deps.jar
         url = "https://github.com/google/google-java-format/releases/" \
             + "download/" + FORMATTER_VERSION \
             + "/google-java-format-" \
