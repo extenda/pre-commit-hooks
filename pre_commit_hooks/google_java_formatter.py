@@ -59,11 +59,11 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     formatter = get_google_java_formatter()
-    java_version = java_version()
-    if java_version < 11:
+    java_major_version = java_version()
+    if java_major_version < 11:
         print("ERROR: Java v11 or greater is required to run the google-java-formatter. Will exit.")
         return 1
-    jep_arg = jep396_args(java_version)
+    jep_arg = jep396_args(java_major_version)
     if not jep_arg: 
         return subprocess.call([
             'java', '-jar', formatter, '--replace'] + args.filenames)
