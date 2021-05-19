@@ -24,7 +24,7 @@ def get_google_java_formatter():
     if not os.path.isfile(gjf_jar):
         print("Downloading " + gjf_jar + "...")
         url = "https://github.com/google/google-java-format/releases/" \
-            + "download/" + FORMATTER_VERSION \
+            + "download/v" + FORMATTER_VERSION \
             + "/google-java-format-" \
             + FORMATTER_VERSION + "-all-deps.jar"
         urllib.request.urlretrieve(url, gjf_jar)
