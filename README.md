@@ -4,7 +4,7 @@ This repository contains pre-commit hooks by Extenda Retail.
 
 See also: http://pre-commit.com for general usage instructions.
 
-To install the `pre-commit` module, Python is required to be installed (tested OK with version 2.7.14). Make sure Python directory is placed in PATH. Python's Scripts directory also should be in PATH.
+To install the `pre-commit` module, Python 3 is required to be installed (tested OK with version 3.9.5). Make sure Python directory is placed in PATH. Python's Scripts directory also should be in PATH.
 
 Run command to install `pre-commit`:
 
@@ -37,7 +37,7 @@ default_stages: [commit]
 * `eclipse-formatter` (__deprecated__) - Runs Eclipse Java formatter with default formatting rules on all staged `java` source files. The following arguments are available:
   * `--source` - set the Java compiler source version (default `1.8`)
   * `--target` - set the Java compiler target version (default `1.8`)
-* `google-java-formatter` - Runs Google's Java formatter on all staged `java` source files.
+* `google-java-formatter` - Runs Google's Java formatter on all staged `java` source files. **Please note: Java 11 or newer is required in v0.5+** Use v0.4 if you need Java 8 support.
 * `pre-commitlint` - Runs [commitlint](https://commitlint.js.org) to validate commit messages.
 
 ## Google Java format in your IDE
