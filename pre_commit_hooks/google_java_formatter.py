@@ -33,7 +33,7 @@ def get_google_java_formatter():
 
 def java_version(): 
     try:
-        with subprocess.Popen("java -version", stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
+        with subprocess.Popen(["java", "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
             output = process.communicate()[1].decode("utf-8")
         if output.find('version "'):
             major_version = output.split('"')[1].split(".")[0]
