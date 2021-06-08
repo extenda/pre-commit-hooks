@@ -25,7 +25,7 @@ Add this to your `.pre-commit-config.yaml` in project's root.
 ```yaml
 default_stages: [commit]
 -  repo: git://github.com/extenda/pre-commit-hooks
-   rev: v0.5 # Use the ref you want to point at
+   rev: v0.6 # Use the ref you want to point at
    hooks:
    - id: google-java-formatter
    - id: commitlint
