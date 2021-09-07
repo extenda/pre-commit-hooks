@@ -18,3 +18,8 @@
   description: Lint commit messages according to the conventional conventions
   entry: extenda/commitlint
   language: docker_image
+- id: vale
+  name: Vale lint
+  description: Lint natural language with the Extenda Retail writing style
+  entry: extenda/vale
+  language: docker_image
