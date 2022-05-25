@@ -39,7 +39,7 @@ default_stages: [commit]
   * `--target` - set the Java compiler target version (default `1.8`)
 * `google-java-formatter` - Runs Google's Java formatter on all staged `java` source files. **Please note: Java 11 or newer is required in v0.5+** Use v0.4 if you need Java 8 support.
 * `pre-commitlint` - Runs [commitlint](https://commitlint.js.org) to validate commit messages.
-* `vale` - Runs [Extenda docker-vale](https://github.com/extenda/docker-vale) wrapping [Vale lint](https://github.com/errata-ai/vale) and Extenda's own lint style to validate natural language in files.
+* `vale` (__deprecated__) - Runs [Extenda docker-vale](https://github.com/extenda/docker-vale) wrapping [Vale lint](https://github.com/errata-ai/vale) and Extenda's own lint style to validate natural language in files.
 
 ## Google Java format in your IDE
 
