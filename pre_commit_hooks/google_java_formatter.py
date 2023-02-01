@@ -6,7 +6,7 @@ import os
 import errno
 import urllib.request
 
-FORMATTER_VERSION = "1.10.0"
+FORMATTER_VERSION = "1.15.0"
 
 
 def get_google_java_formatter():
