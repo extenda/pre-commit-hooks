@@ -1,10 +1,8 @@
 repos:
--   repo: git://github.com/pre-commit/pre-commit-hooks
-    sha: v1.1.1
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
     hooks:
-    -   id: end-of-file-fixer
-    -   id: trailing-whitespace
-    -   id: autopep8-wrapper
-    -   id: flake8
-    -   id: mixed-line-ending
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
         args: [--fix=lf]

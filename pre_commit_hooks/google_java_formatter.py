@@ -6,8 +6,7 @@ import os
 import errno
 import urllib.request
 
-FORMATTER_VERSION = "1.17.0"
-
+FORMATTER_VERSION = "1.18.1"
 
 def get_google_java_formatter():
     bin_dir = os.path.join(os.path.expanduser("~"), ".google-java-formatter")
@@ -31,7 +30,7 @@ def get_google_java_formatter():
 
     return os.path.abspath(gjf_jar)
 
-def java_version(): 
+def java_version():
     try:
         with subprocess.Popen(["java", "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
             output = process.communicate()[1].decode("utf-8")
@@ -51,7 +50,7 @@ def jep396_args(major_version):
 --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
 --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED".split(" ")
     return ""
- 
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('filenames', nargs='*',
@@ -64,7 +63,7 @@ def main(argv=None):
         print("ERROR: Java v11 or greater is required to run the google-java-formatter. Will exit.")
         return 1
     jep_arg = jep396_args(java_major_version)
-    if not jep_arg: 
+    if not jep_arg:
         return subprocess.call([
             'java', '-jar', formatter, '--replace'] + args.filenames)
     else:
