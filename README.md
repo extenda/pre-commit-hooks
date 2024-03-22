@@ -25,7 +25,7 @@ Add this to your `.pre-commit-config.yaml` in project's root.
 ```yaml
 default_stages: [commit]
 -  repo: git://github.com/extenda/pre-commit-hooks
-   rev: v0.9.0 # Use the ref you want to point at
+   rev: v0.12.0 # Use the ref you want to point at
    hooks:
    - id: google-java-formatter
    - id: commitlint
@@ -45,7 +45,7 @@ default_stages: [commit]
 
 There's a Google Java Format plugin for both Eclipse and IntelliJ.
 
-The current version used is `1.17.0.0`.
+The current version used is `1.21.0`.
 
 ### Eclipse
 
