@@ -45,7 +45,7 @@ default_stages: [commit]
 
 There's a Google Java Format plugin for both Eclipse and IntelliJ.
 
-The current version used is `1.25.2`.
+The current version used is `1.28.0`.
 
 ### Eclipse
 
