@@ -16,5 +16,6 @@
 - id: commitlint
   name: Commitlint
   description: Lint commit messages according to the conventional conventions
-  entry: extenda/commitlint
-  language: docker_image
+  entry: pre_commit_hooks/commitlint.sh
+  language: script
+  stages: [commit-msg]
