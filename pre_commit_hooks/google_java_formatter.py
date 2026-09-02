@@ -4,6 +4,7 @@ import argparse
 import subprocess
 import os
 import errno
+import re
 import urllib.request
 
 FORMATTER_VERSION = "1.36.1"
@@ -30,16 +31,22 @@ def get_google_java_formatter():
 
     return os.path.abspath(gjf_jar)
 
+def parse_java_version(output):
+    """The Java feature version reported by `java -version`.
+
+    Read the leading integer of the version string rather than splitting on
+    ".": early access builds report `27-ea`, which is not an integer, and Java 8
+    reports `1.8.0_504`, whose leading component really is 1 and so stays below
+    the version the formatter needs.
+    """
+    match = re.search(r'version "(\d+)', output)
+    return int(match.group(1)) if match else 1
+
+
 def java_version():
-    try:
-        with subprocess.Popen(["java", "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
-            output = process.communicate()[1].decode("utf-8")
-        if output.find('version "'):
-            major_version = output.split('"')[1].split(".")[0]
-            return int(major_version)
-    except ValueError:
-        return 1
-    return 1
+    with subprocess.Popen(["java", "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
+        output = process.communicate()[1].decode("utf-8")
+    return parse_java_version(output)
 
 
 def jep396_args(major_version):
