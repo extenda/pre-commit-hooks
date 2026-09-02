@@ -45,7 +45,9 @@ default_stages: [commit]
 
 There's a Google Java Format plugin for both Eclipse and IntelliJ.
 
-The current version used is `1.28.0`.
+Check the latest at [google-java-format Releases page](https://github.com/google/google-java-format/releases].
+
+The `google-java-format` version that the `google-java-formatter` bundled in is `1.36.1`.
 
 ### Eclipse
 

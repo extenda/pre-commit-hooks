@@ -6,7 +6,7 @@ import os
 import errno
 import urllib.request
 
-FORMATTER_VERSION = "1.28.0"
+FORMATTER_VERSION = "1.36.1"
 
 def get_google_java_formatter():
     bin_dir = os.path.join(os.path.expanduser("~"), ".google-java-formatter")
