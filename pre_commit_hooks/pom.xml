@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Not a build file. Nothing ever runs Maven on this pom.
+
+  It exists so Dependabot can raise the google-java-format upgrade as a pull
+  request. No Dependabot ecosystem understands a version constant in a Python
+  module, and google-java-format is not published to PyPI, so the version has to
+  live in a manifest Dependabot parse. google_java_formatter.py reads it back
+  from here, which makes the Dependabot pull request the entire upgrade.
+
+  Do not edit the version by hand.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>se.extenda.pre-commit-hooks</groupId>
+  <artifactId>google-java-formatter-version</artifactId>
+  <version>0.0.0</version>
+  <packaging>pom</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.googlejavaformat</groupId>
+      <artifactId>google-java-format</artifactId>
+      <version>1.36.1</version>
+    </dependency>
+  </dependencies>
+</project>

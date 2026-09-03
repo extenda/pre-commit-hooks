@@ -1,0 +1,25 @@
+name: Dependabot auto-merge
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  # The `test` job in commit.yml is the gate: it downloads the google-java-format
+  # release the pull request pins and reformats Java with it, so nothing merges on
+  # a version that cannot format. No service-definition input -- this repository
+  # deploys nothing, so the shared workflow treats it as a library.
+  #
+  # `workflows` covers major GitHub Actions bumps as well as minor ones. That is
+  # deliberate: a major that breaks the build fails `test` and never merges, and
+  # this repository's blast radius for an action bump is its own CI.
+  auto-merge:
+    uses: extenda/shared-dependabot/.github/workflows/dependabot-auto-merge.yml@v1
+    with:
+      auto-merge-groups: patch-updates,minor-updates,workflows
+    secrets:
+      EXTENDA_BOT_APP_ID: ${{ secrets.EXTENDA_BOT_APP_ID }}
+      EXTENDA_BOT_PRIVATE_KEY: ${{ secrets.EXTENDA_BOT_PRIVATE_KEY }}
