@@ -37,7 +37,7 @@ default_stages: [commit]
 * `eclipse-formatter` (__deprecated__) - Runs Eclipse Java formatter with default formatting rules on all staged `java` source files. The following arguments are available:
   * `--source` - set the Java compiler source version (default `1.8`)
   * `--target` - set the Java compiler target version (default `1.8`)
-* `google-java-formatter` - Runs Google's Java formatter on all staged `java` source files. **Please note: Java 11 or newer is required in v0.5+** Use v0.4 if you need Java 8 support.
+* `google-java-formatter` - Runs Google's Java formatter on all staged `java` source files. `google-java-format` raises its minimum JDK from time to time; the hook reads that floor from the release it downloads and tells you when your JDK is older.
 * `pre-commitlint` - Runs [commitlint](https://commitlint.js.org) to validate commit messages.
 * `vale` (__deprecated__) - Runs [Extenda docker-vale](https://github.com/extenda/docker-vale) wrapping [Vale lint](https://github.com/errata-ai/vale) and Extenda's own lint style to validate natural language in files.
 
@@ -45,9 +45,7 @@ default_stages: [commit]
 
 There's a Google Java Format plugin for both Eclipse and IntelliJ.
 
-Check the latest at [google-java-format Releases page](https://github.com/google/google-java-format/releases].
-
-The `google-java-format` version that the `google-java-formatter` bundled in is `1.36.1`.
+The bundled version is pinned in [`pre_commit_hooks/pom.xml`](pre_commit_hooks/pom.xml) and kept current by Dependabot. Match your IDE plugin to it.
 
 ### Eclipse
 

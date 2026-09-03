@@ -1,0 +1,44 @@
+version: 2
+registries:
+  maven-artifact-registry:
+    type: maven-repository
+    url: https://europe-west1-maven.pkg.dev/extenda/maven/
+    username: _json_key_base64
+    password: ${{ secrets.DEPENDABOT_AUTH }}
+updates:
+  - package-ecosystem: maven
+    registries:
+      - maven-artifact-registry
+    directory: /pre_commit_hooks
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: '08:00'
+      timezone: Europe/Stockholm
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+    groups:
+      patch-updates:
+        update-types:
+          - patch
+        patterns:
+          - '*'
+      minor-updates:
+        update-types:
+          - minor
+        patterns:
+          - '*'
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: '08:15'
+      timezone: Europe/Stockholm
+    cooldown:
+      default-days: 7
+    groups:
+      workflows:
+        patterns:
+          - '*'

@@ -1,0 +1,193 @@
+name: commit
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      - uses: pre-commit/action@v3.0.1
+
+  # Two numbers decide whether the hook runs at all: the Java the developer has
+  # and the Java the pinned formatter needs. Both are read out of formats that
+  # shift -- a JDK version string, a class file header -- so a shape nobody
+  # anticipated should be a failing test, not a hook that refuses to run.
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      - name: Install hooks and pytest
+        run: pip install . pytest
+
+      - run: python -m pytest tests -q
+
+  # google-java-format raises its minimum JDK without announcing it: 1.21 ran on
+  # Java 11, 1.25 needed 17, 1.36 needs 21. The hook reads that floor out of the
+  # jar, and this matrix pins both sides of it -- below the floor it must refuse
+  # with a readable message and leave the file alone, at or above it must produce
+  # formatted Java that still compiles. A Dependabot bump that moves the floor
+  # fails here instead of reaching developers as an UnsupportedClassVersionError.
+  formatter:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['11', '17', '21', '25']
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Install hooks
+        run: pip install .
+
+      - name: Format on Java ${{ matrix.java }}
+        # Keep the checkout off sys.path so the version is read from the
+        # installed package, which is what a consumer gets, and not from the
+        # source tree sitting in the working directory.
+        env:
+          PYTHONSAFEPATH: '1'
+        run: |
+          version="$(python -c 'from pre_commit_hooks.google_java_formatter import formatter_version; print(formatter_version())')"
+          required="$(python -c 'from pre_commit_hooks.google_java_formatter import get_google_java_formatter as g, required_java_version as r; print(r(g()))')"
+          echo "google-java-format $version requires Java $required, running on Java ${{ matrix.java }}"
+
+          work="$(mktemp -d)"
+          printf '%s\n' \
+            'package com.example;' \
+            'import java.util.List;' \
+            'public class Example {   public static void main( String[] args ) {' \
+            'List<String> names = List.of( "a","b" );' \
+            'names.forEach( n -> System.out.println(   n ) ) ;} }' > "$work/Example.java"
+          cp "$work/Example.java" "$work/Example.java.orig"
+
+          if [ "${{ matrix.java }}" -lt "$required" ]; then
+            if google-java-formatter "$work/Example.java" > "$work/log" 2>&1; then
+              echo "::error::the formatter ran on Java ${{ matrix.java }}, below its floor of $required"
+              cat "$work/log"
+              exit 1
+            fi
+            if ! grep -q "requires Java $required or newer" "$work/log"; then
+              echo "::error::expected a readable version message, got:"
+              cat "$work/log"
+              exit 1
+            fi
+            if ! cmp -s "$work/Example.java" "$work/Example.java.orig"; then
+              echo "::error::the file was modified despite the refusal"
+              exit 1
+            fi
+            echo "refused cleanly, as expected"
+            exit 0
+          fi
+
+          google-java-formatter "$work/Example.java"
+
+          if [ ! -f "$HOME/.google-java-formatter/google-java-format-$version.jar" ]; then
+            echo "::error::the pinned version and the downloaded jar disagree"
+            exit 1
+          fi
+          if cmp -s "$work/Example.java" "$work/Example.java.orig"; then
+            echo "::error::the formatter left the file unchanged"
+            exit 1
+          fi
+
+          cp "$work/Example.java" "$work/Example.java.formatted"
+          google-java-formatter "$work/Example.java"
+          if ! cmp -s "$work/Example.java" "$work/Example.java.formatted"; then
+            echo "::error::the formatter is not idempotent"
+            exit 1
+          fi
+
+          javac -d "$work/classes" "$work/Example.java"
+          cat "$work/Example.java"
+
+  # The contract a consumer actually gets. pre-commit builds the hook environment
+  # from this repository, resolves the entry point and filters by file type, so
+  # this is the only check that proves pom.xml ships inside the installed package
+  # -- calling the console script directly reads it from the source tree instead.
+  hooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run the hook as a consumer would
+        run: |
+          work="$(mktemp -d)"
+          git -C "$work" init -q
+          git -C "$work" config user.email ci@extendaretail.com
+          git -C "$work" config user.name CI
+          printf '%s\n' \
+            'package com.example;' \
+            'public class Example {   public static void main( String[] args ) {' \
+            'System.out.println(   "hello" ) ;} }' > "$work/Example.java"
+          git -C "$work" add Example.java
+          cd "$work"
+
+          # A formatter that changes a file is a pre-commit failure by design, so
+          # the first run is expected to report one.
+          pre-commit try-repo "$GITHUB_WORKSPACE" google-java-formatter \
+            --all-files --color never || true
+          git add -A
+
+          # The second run has to be clean. A hook that never ran, or one that
+          # formats differently each time, fails here.
+          pre-commit try-repo "$GITHUB_WORKSPACE" google-java-formatter \
+            --all-files --color never
+
+          grep -q 'System.out.println("hello");' Example.java
+
+  # The single required status check. Keeping the matrix behind it means adding a
+  # JDK never needs a branch protection change in extenda/tf-github.
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - unit
+      - formatter
+      - hooks
+    if: always()
+    steps:
+      - name: Require every job to have succeeded
+        run: |
+          results='${{ join(needs.*.result, " ") }}'
+          echo "job results: $results"
+          for result in $results; do
+            if [ "$result" != "success" ]; then
+              echo "::error::a required job did not succeed"
+              exit 1
+            fi
+          done

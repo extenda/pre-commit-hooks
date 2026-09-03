@@ -1,7 +1,9 @@
 node_modules/
 .idea/
+*.iml
 
-# Build artifacts from `pip install .`, which contributors now run for the tests.
+# `pip install .` copies the package, pom.xml included, into build/. Left untracked
+# it also feeds the Dependabot generator a second, bogus maven directory.
 build/
 dist/
 *.egg-info/
