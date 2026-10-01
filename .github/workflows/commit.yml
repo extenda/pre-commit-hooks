@@ -1,0 +1,111 @@
+name: commit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      # The steps of pre-commit/action@v3.0.1, which pins the deprecated
+      # Node.js 20 actions/cache@v4.
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - run: pre-commit run --all-files --show-diff-on-failure --color=always
+
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      - name: Install hooks and pytest
+        run: pip install . pytest
+
+      - run: python -m pytest tests -q
+
+  # The contract a consumer actually gets. pre-commit builds the hook environment
+  # from this repository, resolves the entry point and filters by file type, so
+  # this proves the pinned formatter downloads, runs and gives a stable result.
+  hooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run the hook as a consumer would
+        run: |
+          work="$(mktemp -d)"
+          git -C "$work" init -q
+          git -C "$work" config user.email ci@extendaretail.com
+          git -C "$work" config user.name CI
+          printf '%s\n' \
+            'package com.example;' \
+            'public class Example {   public static void main( String[] args ) {' \
+            'System.out.println(   "hello" ) ;} }' > "$work/Example.java"
+          git -C "$work" add Example.java
+          cd "$work"
+
+          # A formatter that changes a file is a pre-commit failure by design, so
+          # the first run is expected to report one.
+          pre-commit try-repo "$GITHUB_WORKSPACE" google-java-formatter \
+            --all-files --color never || true
+          git add -A
+
+          # The second run has to be clean. A hook that never ran, or one that
+          # formats differently each time, fails here.
+          pre-commit try-repo "$GITHUB_WORKSPACE" google-java-formatter \
+            --all-files --color never
+
+          grep -q 'System.out.println("hello");' Example.java
+
+  # The single required status check. Keeping the jobs behind it means adding one
+  # never needs a branch protection change in extenda/tf-github.
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - unit
+      - hooks
+    if: always()
+    steps:
+      - name: Require every job to have succeeded
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "job results: $RESULTS"
+          for result in $RESULTS; do
+            if [ "$result" != "success" ]; then
+              echo "::error::a required job did not succeed"
+              exit 1
+            fi
+          done
